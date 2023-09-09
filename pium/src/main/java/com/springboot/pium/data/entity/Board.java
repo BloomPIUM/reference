@@ -1,9 +1,6 @@
 package com.springboot.pium.data.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -11,14 +8,17 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
+@ToString
 @Table(name = "board")
 public class Board {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer board_id;
+    private Long board_id;
 
     @Column(nullable = false)
     private String title;
@@ -27,10 +27,10 @@ public class Board {
     private String content;
 
     @Column(nullable = false)
-    private Integer view_cnt;
+    private int view_cnt;
 
     @Column(nullable = false)
-    private Integer like_cnt;
+    private int like_cnt;
 
     private LocalDateTime created_date;
 

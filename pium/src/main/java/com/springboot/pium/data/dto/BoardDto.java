@@ -9,10 +9,10 @@ import lombok.*;
 @Builder
 public class BoardDto {
 
-//    private Integer board_id;
+//    private Long board_id;
     private String title;
     private String content;
-    private Integer view_cnt;
-    private Integer like_cnt;
+//    private int view_cnt;
+//    private int like_cnt;
 
 }

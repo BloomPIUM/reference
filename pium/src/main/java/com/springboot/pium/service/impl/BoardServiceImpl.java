@@ -1,10 +1,12 @@
 package com.springboot.pium.service.impl;
 
-import com.springboot.pium.data.dao.BoardDAO;
 import com.springboot.pium.data.dto.BoardDto;
 import com.springboot.pium.data.dto.BoardResponseDto;
 import com.springboot.pium.data.entity.Board;
+import com.springboot.pium.data.repository.BoardRepository;
 import com.springboot.pium.service.BoardService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,19 +15,23 @@ import java.time.LocalDateTime;
 @Service
 public class BoardServiceImpl implements BoardService {
 
-    private final BoardDAO boardDAO;
+    private final Logger LOGGER = LoggerFactory.getLogger(BoardServiceImpl.class);
+    private final BoardRepository boardRepository;
 
     @Autowired
-    public BoardServiceImpl(BoardDAO boardDAO) {
-        this.boardDAO = boardDAO;
+    public BoardServiceImpl(BoardRepository boardRepository) {
+        this.boardRepository = boardRepository;
     }
 
     @Override
-    public BoardResponseDto getBoard(Integer board_id) {
-        Board board = boardDAO.selectBoard(board_id);
+    public BoardResponseDto getBoard(Long board_id) {
+        LOGGER.info("[getBoard] input board_id : {}", board_id);
+        Board board = boardRepository.findById(board_id).get();
+
+        LOGGER.info("[getBoard] input board_id : {}, Title : {}", board.getBoard_id(), board.getTitle());
 
         BoardResponseDto boardResponseDto = new BoardResponseDto();
-//        boardResponseDto.setBoard_id(board.getBoard_id());
+        boardResponseDto.setBoard_id(board.getBoard_id());
         boardResponseDto.setTitle(board.getTitle());
         boardResponseDto.setContent(board.getContent());
         boardResponseDto.setView_cnt(board.getView_cnt());
@@ -37,59 +43,44 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public BoardResponseDto saveBoard (BoardDto boardDto) {
+        LOGGER.info("[saveBoard] boardDto : {}", boardDto.toString());
         Board board = new Board();
-//        board.setBoard_id(boardDto.getBoard_id());
         board.setTitle(boardDto.getTitle());
         board.setContent(boardDto.getContent());
-        board.setView_cnt(boardDto.getView_cnt());
-        board.setLike_cnt(boardDto.getLike_cnt());
         board.setCreated_date(LocalDateTime.now());
         board.setModified_date(LocalDateTime.now());
 
-        Board savedBoard = boardDAO.insertBoard(board);
+        Board savedBoard = boardRepository.save(board);
+        LOGGER.info("[saveBoard] savedBoard : {}", savedBoard);
 
         BoardResponseDto boardResponseDto = new BoardResponseDto();
         boardResponseDto.setBoard_id(savedBoard.getBoard_id());
         boardResponseDto.setTitle(savedBoard.getTitle());
         boardResponseDto.setContent(savedBoard.getContent());
-        boardResponseDto.setView_cnt(savedBoard.getView_cnt());
-        boardResponseDto.setLike_cnt(savedBoard.getLike_cnt());
 
         return boardResponseDto;
 
     }
 
     @Override
-    public BoardResponseDto changeBoardTitle(Integer board_id, String title) throws Exception {
-        Board changedBoard = boardDAO.updateBoardTitle(board_id, title);
+    public BoardResponseDto modifyBoard(Long board_id, String title, String content) {
+        Board foundBoard = boardRepository.findById(board_id).get();
+        foundBoard.setTitle(title);
+        Board changedBoard = boardRepository.save(foundBoard);
 
         BoardResponseDto boardResponseDto = new BoardResponseDto();
         boardResponseDto.setBoard_id(changedBoard.getBoard_id());
         boardResponseDto.setTitle(changedBoard.getTitle());
         boardResponseDto.setContent(changedBoard.getContent());
-        boardResponseDto.setView_cnt(changedBoard.getView_cnt());
-        boardResponseDto.setLike_cnt(changedBoard.getLike_cnt());
 
         return boardResponseDto;
     }
 
-    @Override
-    public BoardResponseDto changeBoardContent(Integer board_id, String content) throws Exception {
-        Board changedBoard = boardDAO.updateBoardContent(board_id, content);
 
-        BoardResponseDto boardResponseDto = new BoardResponseDto();
-        boardResponseDto.setBoard_id(changedBoard.getBoard_id());
-        boardResponseDto.setTitle(changedBoard.getTitle());
-        boardResponseDto.setContent(changedBoard.getContent());
-        boardResponseDto.setView_cnt(changedBoard.getView_cnt());
-        boardResponseDto.setLike_cnt(changedBoard.getLike_cnt());
-
-        return boardResponseDto;
-    }
 
     @Override
-    public void deleteBoard(Integer board_id) throws Exception {
-        boardDAO.deleteBoard(board_id);
+    public void deleteBoard(Long board_id) {
+        boardRepository.deleteById(board_id);
     }
 
 
