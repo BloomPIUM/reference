@@ -6,5 +6,5 @@ user_id -> username<br>
 user_pw -> password
 
 ### 성별을 "남자" "여자"로 구분
-status type<br><br>
+gender type<br><br>
 boolean -> String
