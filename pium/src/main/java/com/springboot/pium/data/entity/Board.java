@@ -18,7 +18,7 @@ public class Board {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long board_id;
+    private Long board_id; // 게시글 고유 번호
 
     @Column(nullable = false)
     private String title;
