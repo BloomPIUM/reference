@@ -1,4 +1,7 @@
-# reference
-참고자료 확인을 위해 사용합니다.
+ status 500 Error
+ 
 
-찬혁 브랜치 만들기 성공
+
+BigInteger error 
+
+디버깅 필요함.
