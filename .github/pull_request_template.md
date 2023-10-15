@@ -3,4 +3,5 @@
 
 ## 관련 이슈
 close #issue-number
+<br>
 resolve #issue-number
