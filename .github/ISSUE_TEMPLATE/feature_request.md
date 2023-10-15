@@ -1,7 +1,7 @@
 ---
-name: feature_request
-about: github issue 등록을 위한 템플릿1
-title: ''
+name: Feature request
+about: Create new feature for this project
+title: [FEAT]
 labels: ''
 assignees: ''
 
